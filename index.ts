@@ -12,7 +12,7 @@
 // SECCIÓN 3: LÓGICA DE NEGOCIO Y MÉTRICAS
 // ==========================================
 
-
+console.log("hola que tal")
 // ==========================================
 // SECCIÓN 4: MAIN, EJECUCIÓN Y MANEJO DE ERRORES
 // ==========================================
