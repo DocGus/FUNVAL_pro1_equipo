@@ -1,13 +1,15 @@
-// ==========================================
-// SECCIÓN 1: MODELOS Y DATOS FICTICIOS
-// ==========================================
-export interface Huesped {
+
+ // ==========================================
+ // SECCIÓN 1: MODELOS Y DATOS FICTICIOS
+ // ==========================================
+
+interface Huesped {
     dni: string;
     nombreCompleto: string;
     esVip: boolean;
 }
 
-export interface Reserva {
+interface Reserva {
     id: string;
     huesped: Huesped;
     noches: number;
@@ -16,7 +18,7 @@ export interface Reserva {
     estado: 'confirmada' | 'cancelada';
 }
 
-export const dbReservas: Reserva[] = [
+const dbReservas: Reserva[] = [
     {
         id: "RES-001",
         huesped: { dni: "111222333", nombreCompleto: "Ana María Gomez", esVip: true },
@@ -86,32 +88,26 @@ export const dbReservas: Reserva[] = [
 // ==========================================
 // SECCIÓN 2: PROMESA ASÍNCRONA Y SIMULACIÓN DE API
 // ==========================================
-/* PRUEBA DE COLABORACIÓN: Adrián Mejía
-Sistema de Reservas Hoteleras con Temporadas y Penalizaciones
-Función sincronizarReservas(): Promise<Reserva[]> con latencia de 2.2s y fallo
-aleatorio del 20% ("Error 504 Gateway Timeout con Central Hotelera").*/
 
-function sincronizarReservas(data: Reserva[]): Promise<Reserva[]> { //Reserva marcará en error hasta tener la parte de Dev 1.
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (Math.random() < 0.20) {
-        reject(new Error("Error 504: Gateway Timeout con Central Hotelera."));
-      } else {
-        resolve(data);
-      }
-    }, 2200);
-  });
+function sincronizarReservas(data: Reserva[]): Promise<Reserva[]> {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (Math.random() < 0.20) {
+                reject(
+                    new Error("Error 504: Gateway Timeout con Central Hotelera.")
+                );
+            } else {
+                resolve(data);
+            }
+        }, 2200);
+    });
 }
-
 
 // ==========================================
 // SECCIÓN 3: LÓGICA DE NEGOCIO Y MÉTRICAS
 // ==========================================
 
-
-import { Reserva, dbReservas } from "./reservas";
-
-export function liquidarReserva(r: Reserva): number {
+function liquidarReserva(r: Reserva): number {
     let total = r.noches * r.costoBasePorNoche;
 
     if (r.huesped.esVip) {
@@ -129,15 +125,64 @@ export function liquidarReserva(r: Reserva): number {
     return Number(total.toFixed(2));
 }
 
-// Prueba de la función
-dbReservas.forEach((reserva) => {
-    console.log(
-        reserva.id,
-        reserva.huesped.nombreCompleto,
-        liquidarReserva(reserva)
-    );
-});
-
 // ==========================================
 // SECCIÓN 4: MAIN, EJECUCIÓN Y MANEJO DE ERRORES
 // ==========================================
+
+async function main(): Promise<void> {
+    try {
+        console.log("=== SISTEMA DE RESERVAS HOTELERAS ===");
+        console.log("Sincronizando reservas...\n");
+
+        const reservas = await sincronizarReservas(dbReservas);
+
+        let ingresosConfirmados = 0;
+        let penalizacionesCancelacion = 0;
+
+        const suitesOcupadas = reservas.filter(
+            (reserva) =>
+                reserva.tipoHabitacion === "suite" &&
+                reserva.estado === "confirmada"
+        );
+
+        for (const reserva of reservas) {
+            const importe = liquidarReserva(reserva);
+
+            if (reserva.estado === "confirmada") {
+                ingresosConfirmados += importe;
+            } else {
+                penalizacionesCancelacion += importe;
+            }
+        }
+
+        console.log("\n=== REPORTE FINANCIERO ===");
+        console.log(
+            `Ingresos confirmados: $${ingresosConfirmados.toFixed(2)}`
+        );
+        console.log(
+            `Penalizaciones por cancelación: $${penalizacionesCancelacion.toFixed(2)}`
+        );
+
+        console.log("\n=== SUITES OCUPADAS ===");
+
+        if (suitesOcupadas.length === 0) {
+            console.log("No hay suites ocupadas.");
+        } else {
+            for (const reserva of suitesOcupadas) {
+                console.log(
+                    `${reserva.id} | ${reserva.huesped.nombreCompleto} | ${reserva.noches} noches`
+                );
+            }
+        }
+    } catch (error) {
+        console.error("\nNo fue posible sincronizar las reservas.");
+
+        if (error instanceof Error) {
+            console.error(`Detalle: ${error.message}`);
+        } else {
+            console.error("Ocurrió un error desconocido.");
+        }
+    }
+}
+
+main();
