@@ -19,7 +19,7 @@ export interface Reserva {
 export const dbReservas: Reserva[] = [
     {
         id: "RES-001",
-        huesped: { dni: "111222333", nombreCompleto: "Ana María Gómez", esVip: true },
+        huesped: { dni: "111222333", nombreCompleto: "Ana María Gomez", esVip: true },
         noches: 3,
         tipoHabitacion: "suite",
         costoBasePorNoche: 250,
@@ -27,7 +27,7 @@ export const dbReservas: Reserva[] = [
     },
     {
         id: "RES-002",
-        huesped: { dni: "444555666", nombreCompleto: "Carlos Pérez", esVip: false },
+        huesped: { dni: "444555666", nombreCompleto: "Carlos Perez", esVip: false },
         noches: 2,
         tipoHabitacion: "simple",
         costoBasePorNoche: 100,
@@ -35,7 +35,7 @@ export const dbReservas: Reserva[] = [
     },
     {
         id: "RES-003",
-        huesped: { dni: "777888999", nombreCompleto: "Lucía Ramírez", esVip: true },
+        huesped: { dni: "777888999", nombreCompleto: "Lucía Ramirez", esVip: true },
         noches: 5,
         tipoHabitacion: "familiar",
         costoBasePorNoche: 300,
@@ -59,7 +59,7 @@ export const dbReservas: Reserva[] = [
     },
     {
         id: "RES-006",
-        huesped: { dni: "456123789", nombreCompleto: "James Díaz", esVip: false },
+        huesped: { dni: "456123789", nombreCompleto: "James Diaz", esVip: false },
         noches: 3,
         tipoHabitacion: "familiar",
         costoBasePorNoche: 220,
@@ -75,7 +75,7 @@ export const dbReservas: Reserva[] = [
     },
     {
         id: "RES-008",
-        huesped: { dni: "654987321", nombreCompleto: "Andrés Restrepo", esVip: true },
+        huesped: { dni: "654987321", nombreCompleto: "Andres Restrepo", esVip: true },
         noches: 6,
         tipoHabitacion: "familiar",
         costoBasePorNoche: 350,
