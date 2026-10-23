@@ -1,6 +1,20 @@
 // ==========================================
 // SECCIÓN 1: MODELOS Y DATOS FICTICIOS
 // ==========================================
+export interface Huesped {
+    dni: string;
+    nombreCompleto: string;
+    esVip: boolean;
+}
+
+export interface Reserva {
+    id: string;
+    huesped: Huesped;
+    noches: number;
+    tipoHabitacion: 'simple' | 'suite' | 'familiar';
+    costoBasePorNoche: number;
+    estado: 'confirmada' | 'cancelada';
+}
 
 
 // ==========================================
